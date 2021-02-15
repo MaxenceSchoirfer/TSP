@@ -37,7 +37,7 @@ public final class Main extends OutputWriter
 
     private static final String LOG_FILE = "tsp.log";
 //	private static final int NB_RUNS = 100;
-	private static final int NB_SECONDS = 60;
+	private static final int NB_SECONDS = 5;
     private static final int NB_RUNS = 1;
 //    private static final int NB_SECONDS = 10;
     
@@ -133,8 +133,12 @@ public final class Main extends OutputWriter
         ArrayList<Class<? extends Project>> subClasses = new ArrayList <Class <? extends Project>> ();;
         for (Class<? extends Project> subClass : subClassesTmp)
         {
-            if (!Modifier.isAbstract (subClass.getModifiers ()))
-                subClasses.add (subClass);
+            if (!Modifier.isAbstract (subClass.getModifiers ())){
+             //   if (!subClass.getPackageName().contains("exemple")){
+                    subClasses.add (subClass);
+              //  }
+            }
+
         }
         this.print (subClasses.size () + " projet");
         if (subClasses.size () > 1)

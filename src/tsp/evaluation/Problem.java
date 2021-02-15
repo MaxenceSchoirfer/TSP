@@ -28,8 +28,10 @@ public final class Problem
         File [] files = directory.listFiles ();
         Arrays.sort(files);
         ArrayList <Problem> problems = new ArrayList <Problem> ();
-        for (File file: files)
-            problems.add (new Problem (file.getAbsolutePath ()));
+        for (File file: files){
+			//if (file.getName().startsWith("b")) problems.add (new Problem (file.getAbsolutePath ()));
+			problems.add (new Problem (file.getAbsolutePath ()));
+		}
         return problems;
     }
 

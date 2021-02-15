@@ -1,15 +1,15 @@
 Évaluation des projets
 1 exécution
-60 secondes
-1 projet
+5 secondes
+2 projets
 3 problèmes
 
 tsp.projects.exemple.RandomSearch
-C:\Users\maxen\OneDrive\Dev\TSP\data\bier127	534201.4532596276
-C:\Users\maxen\OneDrive\Dev\TSP\data\fnl4461	8050941.355374235
-C:\Users\maxen\OneDrive\Dev\TSP\data\gr666  	53131.26098690926
+C:\Users\maxen\OneDrive\Dev\TSP\data\bier127	554831.6629109666
+C:\Users\maxen\OneDrive\Dev\TSP\data\fnl4461	8108700.534886952
+C:\Users\maxen\OneDrive\Dev\TSP\data\gr666  	53208.87104841182
 
-Projet Exemple
-Alexandre Blansché
-Évaluation: 0.0
-
+tsp.projects.greedy.Greedy
+C:\Users\maxen\OneDrive\Dev\TSP\data\bier127	147312.7210414805
+C:\Users\maxen\OneDrive\Dev\TSP\data\fnl4461	1.7976931348623157E308
+C:\Users\maxen\OneDrive\Dev\TSP\data\gr666  
