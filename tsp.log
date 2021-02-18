@@ -1,15 +1,13 @@
 Évaluation des projets
 1 exécution
-5 secondes
-2 projets
-3 problèmes
+60 secondes
+1 projet
+1 problème
 
-tsp.projects.exemple.RandomSearch
-C:\Users\maxen\OneDrive\Dev\TSP\data\bier127	554831.6629109666
-C:\Users\maxen\OneDrive\Dev\TSP\data\fnl4461	8108700.534886952
-C:\Users\maxen\OneDrive\Dev\TSP\data\gr666  	53208.87104841182
+tsp.projects.genetic.Genetic
+C:\Users\maxen\OneDrive\Dev\TSP\data\aaa1350	68492.92426180022
 
-tsp.projects.greedy.Greedy
-C:\Users\maxen\OneDrive\Dev\TSP\data\bier127	147312.7210414805
-C:\Users\maxen\OneDrive\Dev\TSP\data\fnl4461	1.7976931348623157E308
-C:\Users\maxen\OneDrive\Dev\TSP\data\gr666  
+Projet Genetic
+Maxence Schoirfer
+Évaluation: 0.0
+

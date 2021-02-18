@@ -6,12 +6,10 @@ import tsp.evaluation.Path;
 import tsp.projects.CompetitorProject;
 import tsp.projects.InvalidProjectException;
 
-import java.util.ArrayList;
-
 public class Greedy extends CompetitorProject {
 
     private int length;
-    private  int[] path;
+    private int[] path;
 
     public Greedy(Evaluation evaluation) throws InvalidProjectException {
         super(evaluation);
@@ -25,11 +23,9 @@ public class Greedy extends CompetitorProject {
         this.length = this.problem.getLength();
         path = new int[length];
 
-
-        //   path[0] = 0;
         Coordinates lastCity = this.problem.getCoordinates(0);
 
-        for (int k = 1; k < length ; k++) {
+        for (int k = 1; k < length; k++) {
             int nextCity = -1;
             double distance = Double.MAX_VALUE;
 
@@ -52,16 +48,12 @@ public class Greedy extends CompetitorProject {
 
 
         }
-
-
-        System.out.println("test");
-
     }
 
     @Override
     public void loop() {
-        Path path = new Path (this.path);
-        this.evaluation.evaluate (path);
+        Path path = new Path(this.path);
+        this.evaluation.evaluate(path);
     }
 
 

@@ -29,8 +29,8 @@ public final class Problem
         Arrays.sort(files);
         ArrayList <Problem> problems = new ArrayList <Problem> ();
         for (File file: files){
-			//if (file.getName().startsWith("b")) problems.add (new Problem (file.getAbsolutePath ()));
-			problems.add (new Problem (file.getAbsolutePath ()));
+			if (file.getName().startsWith("a")) problems.add (new Problem (file.getAbsolutePath ()));
+			//problems.add (new Problem (file.getAbsolutePath ()));
 		}
         return problems;
     }

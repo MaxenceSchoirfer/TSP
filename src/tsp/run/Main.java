@@ -37,7 +37,7 @@ public final class Main extends OutputWriter
 
     private static final String LOG_FILE = "tsp.log";
 //	private static final int NB_RUNS = 100;
-	private static final int NB_SECONDS = 5;
+	private static final int NB_SECONDS = 60;
     private static final int NB_RUNS = 1;
 //    private static final int NB_SECONDS = 10;
     
@@ -57,6 +57,7 @@ public final class Main extends OutputWriter
 	
 	private static Solution run (Class <?> subClass, Problem problem) throws InterruptedException, ExecutionException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException
 	{
+
 		Evaluation evaluation = new Evaluation (problem);
 		Project project = (Project) subClass.getConstructors () [0].newInstance (evaluation);
 		ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -134,9 +135,9 @@ public final class Main extends OutputWriter
         for (Class<? extends Project> subClass : subClassesTmp)
         {
             if (!Modifier.isAbstract (subClass.getModifiers ())){
-             //   if (!subClass.getPackageName().contains("exemple")){
+               if (subClass.getPackageName().contains("genetic")){
                     subClasses.add (subClass);
-              //  }
+                }
             }
 
         }
