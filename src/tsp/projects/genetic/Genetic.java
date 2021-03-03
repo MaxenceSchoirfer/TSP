@@ -20,7 +20,7 @@ public class Genetic extends CompetitorProject {
     private int populationSize;
     private ArrayList<Path> population;
 
-    private double probabilityMutation = 1;
+    private double probabilityMutation = 0.8;
     private double probabilityCrossover = 1;
 
 
@@ -32,24 +32,16 @@ public class Genetic extends CompetitorProject {
         this.addAuthor("Maxence Schoirfer");
         //this.addAuthor("Badis Belhadj-Chaidi");
         this.setMethodName("Genetic");
-        this.populationSize = this.problem.getLength();
-       // this.populationSize = 1000;
+        this.populationSize = this.problem.getLength() * 10;
+        // this.populationSize = 1000;
 
         debug = new ArrayList<>();
     }
 
-    @Override
-    public void initialization() {
-        population = new ArrayList<>();
-        this.length = this.problem.getLength();
-        for (int i = 1; i < populationSize; i++) {
-            population.add(new Path(length));
-        }
-
-
+    private int[] getGreedyPath() {
         int[] path = new int[length];
         Coordinates lastCity = this.problem.getCoordinates(0);
-        for (int k = 1; k < length ; k++) {
+        for (int k = 1; k < length; k++) {
             int nextCity = -1;
             double distance = Double.MAX_VALUE;
 
@@ -67,8 +59,23 @@ public class Genetic extends CompetitorProject {
             if (nextCity != -1) path[k] = nextCity;
             lastCity = this.problem.getCoordinates(nextCity);
         }
+        return path;
+    }
 
-        population.add(new Path(path));
+    @Override
+    public void initialization() {
+        population = new ArrayList<>();
+        this.length = this.problem.getLength();
+        int[] greedyPath = getGreedyPath();
+        population.add(new Path(greedyPath));
+        for (int i = 1; i < populationSize; i++) {
+            if (i % 2 == 0) population.add(new Path(Mutation.mutationIM(greedyPath)));
+            else population.add(new Path(length));
+           // population.add(new Path(length));
+        }
+
+
+     //   population.add();
     }
 
 
@@ -81,7 +88,7 @@ public class Genetic extends CompetitorProject {
 
         //TO-DO add probability crossover
         //selection for the crossover
-        ArrayList<Path> selectedParents = Selection.tournament(population, 10, 5, this.evaluation);
+        ArrayList<Path> selectedParents = Selection.tournament(population, 80, 1, this.evaluation);
         while (childs.size() < populationSize) {
             int rIndex1 = (int) (Math.random() * selectedParents.size());
             int rIndex2 = (int) (Math.random() * selectedParents.size());
@@ -93,30 +100,29 @@ public class Genetic extends CompetitorProject {
         //mutation
         Iterator<Path> iterator = childs.iterator();
         ArrayList<Path> mutatedChilds = new ArrayList<>();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Path path = iterator.next();
             double proba = Math.random();
             iterator.remove();
             if (proba < probabilityCrossover) {
                 mutatedChilds.add(new Path(Mutation.mutationIM(path.getPath())));
-            }else {
+            } else {
                 mutatedChilds.add(path);
             }
         }
-
-
 
 
         ArrayList<Path> selectedChilds = Selection.tournament(mutatedChilds, 10, 5, this.evaluation);
         population.clear();
         population.addAll(selectedParents);
         population.addAll(selectedChilds);
-        for (Path path:population) {
+        for (Path path : population) {
             this.evaluation.evaluate(path);
         }
 
+        debug.add("Optimum = " + this.evaluation.getBestEvaluation());
 
-        ecrireFichier("debug.txt",debug);
+        ecrireFichier("debug.txt", debug);
 
         //mutation
 
@@ -125,23 +131,21 @@ public class Genetic extends CompetitorProject {
     }
 
 
-    public static void ecrireFichier(String nomFichier, List<String> lignes){
-        Writer fluxSortie=null;
-        try{
+    public static void ecrireFichier(String nomFichier, List<String> lignes) {
+        Writer fluxSortie = null;
+        try {
             fluxSortie = new PrintWriter(new BufferedWriter(new FileWriter(
                     nomFichier)));
-            for(int i=0;i<lignes.size()-1;i++){
-                fluxSortie.write(lignes.get(i)+"\n");
+            for (int i = 0; i < lignes.size() - 1; i++) {
+                fluxSortie.write(lignes.get(i) + "\n");
             }
-            fluxSortie.write(lignes.get(lignes.size()-1));
-        }
-        catch(IOException exc){
+            fluxSortie.write(lignes.get(lignes.size() - 1));
+        } catch (IOException exc) {
             exc.printStackTrace();
         }
-        try{
+        try {
             fluxSortie.close();
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
