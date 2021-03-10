@@ -135,9 +135,9 @@ public final class Main extends OutputWriter
         for (Class<? extends Project> subClass : subClassesTmp)
         {
             if (!Modifier.isAbstract (subClass.getModifiers ())){
-               if (subClass.getPackageName().contains("genetic")){
+              // if (subClass.getPackageName().contains("genetic")){
                     subClasses.add (subClass);
-                }
+                //}
             }
 
         }
