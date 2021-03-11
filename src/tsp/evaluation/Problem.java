@@ -17,7 +17,7 @@ public final class Problem
     private static final String directory = "data";
     private String name;
 	private int length;
-	private double [][] data;
+	public double [][] data;
     
     /**
      * @return La liste des problèmes disponibles
