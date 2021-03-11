@@ -12,11 +12,9 @@ import java.util.List;
 import tsp.evaluation.Coordinates;
 import tsp.evaluation.Evaluation;
 import tsp.evaluation.Path;
+import tsp.output.LogFileOutput;
 import tsp.projects.CompetitorProject;
 import tsp.projects.InvalidProjectException;
-import tsp.projects.genetic.Crossover;
-import tsp.projects.genetic.Mutation;
-import tsp.projects.genetic.Selection;
 
 public class HC extends CompetitorProject {
 
@@ -26,6 +24,8 @@ public class HC extends CompetitorProject {
     private int startIndex;
     private Path bestpath;
 
+    private LogFileOutput output;
+
 
     public HC(Evaluation evaluation) throws InvalidProjectException {
         super(evaluation);
@@ -33,6 +33,7 @@ public class HC extends CompetitorProject {
         this.addAuthor("Badis Belhadj-Chaidi");
         this.setMethodName("Hill Climbing");
         debug = new ArrayList<>();
+        output = new LogFileOutput("hc.txt");
     }
 
     private int[] getGreedyPath() {
@@ -108,26 +109,6 @@ public class HC extends CompetitorProject {
    }
         
         
-       
 
-
-    public static void ecrireFichier(String nomFichier, List<String> lignes) {
-        Writer fluxSortie = null;
-        try {
-            fluxSortie = new PrintWriter(new BufferedWriter(new FileWriter(
-                    nomFichier)));
-            for (int i = 0; i < lignes.size() - 1; i++) {
-                fluxSortie.write(lignes.get(i) + "\n");
-            }
-            fluxSortie.write(lignes.get(lignes.size() - 1));
-        } catch (IOException exc) {
-            exc.printStackTrace();
-        }
-        try {
-            fluxSortie.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
