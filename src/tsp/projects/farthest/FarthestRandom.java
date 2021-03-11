@@ -1,6 +1,5 @@
-package tsp.projects.greedy.farthest;
+package tsp.projects.farthest;
 
-import tsp.evaluation.Coordinates;
 import tsp.evaluation.Evaluation;
 import tsp.evaluation.Path;
 import tsp.output.LogFileOutput;

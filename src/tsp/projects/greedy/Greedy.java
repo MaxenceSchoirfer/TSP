@@ -30,10 +30,7 @@ public class Greedy extends CompetitorProject {
         this.addAuthor("Maxence Schoirfer");
         this.addAuthor("Badis Belhadj-Chaidi");
         this.setMethodName("Greedy");
-
         output = new LogFileOutput("trace.txt");
-
-
     }
 
     @Override
@@ -41,9 +38,9 @@ public class Greedy extends CompetitorProject {
         this.startTime = System.currentTimeMillis();
         this.length = this.problem.getLength();
         startIndex = 0;
-        sortCities();
-        //greedy();
-        greedyBis();
+        greedy();
+//        sortCities();
+//        greedyBis();
     }
 
     private void greedy() {
@@ -107,11 +104,7 @@ public class Greedy extends CompetitorProject {
         path = new int[length];
         path[0] = startIndex;
 
-
-
         for (int i = 1; i < length; i++) {
-
-
             //on parcours les plus proches voisin de la dernière ville
             loop:
             for (Integer nearestNeighbourCity : sortedCities[path[i - 1]]) {
@@ -127,10 +120,7 @@ public class Greedy extends CompetitorProject {
                 path[i] = nearestNeighbourCity;
                 break;
             }
-
-
         }
-
 
 
     }
@@ -147,8 +137,8 @@ public class Greedy extends CompetitorProject {
             output.print("Time : " + (System.currentTimeMillis() - startTime));
         }
 
-        //  if (startIndex < length) greedy();
-        if (startIndex < length) greedyBis();
+          if (startIndex < length) greedy();
+//        if (startIndex < length) greedyBis();
 //        for (int[] p:sortedCities) {
 ////            this.evaluation.evaluate(new Path(p));
 //            output.print(this.evaluation.evaluate(new Path(p))+ " : " + Arrays.toString(p) + "\n");
@@ -163,7 +153,6 @@ public class Greedy extends CompetitorProject {
 
         sortedCities = new int[length][length - 1];
         for (int i = 0; i < length; i++) {
-      //      output.print("Time(" + i + " : " + (System.currentTimeMillis() - startTime) + "\n");
             sortedCities[i] = getNearestNeighbours(i, copyCities.clone());
         }
 
@@ -171,10 +160,6 @@ public class Greedy extends CompetitorProject {
     }
 
     private int[] getNearestNeighbours(int origin, int[] clone) {
-
-
-
-       // int[] sortedCities = new int[length - 1];
         int[] sortedCities = new int[length];
         sortedCities[0] = origin;
         int indexSortedCities = 0;
@@ -183,14 +168,14 @@ public class Greedy extends CompetitorProject {
 
         int indexNearestCity;
 
-        for (int n = 1; n < length ; n++) {
+        for (int n = 1; n < length; n++) {
             distance = Double.MAX_VALUE;
             indexNearestCity = -1;
             for (int i = 0; i < length; i++) {
-           //     if (clone[i] != -1) {
+                //     if (clone[i] != -1) {
                 if (clone[i] != -1 && clone[i] != origin) {
 
-                    double d = distance(problem.data[clone[i]][0],problem.data[clone[i]][1],problem.data[origin][0],problem.data[origin][1]);
+                    double d = distance(problem.data[clone[i]][0], problem.data[clone[i]][1], problem.data[origin][0], problem.data[origin][1]);
                     if (d < distance) {
                         distance = d;
                         indexNearestCity = i;
@@ -206,10 +191,10 @@ public class Greedy extends CompetitorProject {
         return sortedCities;
     }
 
-    double distance (double x1, double y1, double x2,double y2){
+    double distance(double x1, double y1, double x2, double y2) {
         double dx = x2 - x1;
         double dy = y2 - y1;
-       return Math.sqrt(dx * dx + dy * dy);
+        return Math.sqrt(dx * dx + dy * dy);
 
     }
 

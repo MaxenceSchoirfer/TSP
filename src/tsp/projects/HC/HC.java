@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -79,33 +80,18 @@ public class HC extends CompetitorProject {
         this.length = this.problem.getLength();
         int [] gpath= getGreedyPath();
         bestpath = new Path(gpath);
-        
-        
+        this.evaluation.evaluate(bestpath);
     }
 
 
     //augmenter la mutation si l'optimum de change pas sur plusieurs génération
     @Override
     public void loop() {
-        
-    	this.evaluation.evaluate(bestpath);
-    	
-        int [] copy = this.path;
-        boolean bestneighbour = false;
-        //mutation
-        do {
-        int [] mutatedcopy = Mutation.mutationIM(copy);
-        
-        Path pathcopy = new Path(mutatedcopy);
-        
-        if(this.evaluation.getBestEvaluation() > this.evaluation.evaluate(pathcopy)) {
-        	
-        	bestpath = new Path(pathcopy);
-        	bestneighbour = true;
+        Path mutatedPath = new Path(Mutation.mutationIM(path.clone()));
+        if(this.evaluation.getBestEvaluation() > this.evaluation.evaluate(mutatedPath)) {
+            output.print("Best path : " + Arrays.toString(bestpath.getPath()) + "\n");
+            bestpath = mutatedPath;
         }
-        
-        }while(bestneighbour);
-        
    }
         
         

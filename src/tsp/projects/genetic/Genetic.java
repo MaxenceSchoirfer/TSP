@@ -3,6 +3,7 @@ package tsp.projects.genetic;
 import tsp.evaluation.Coordinates;
 import tsp.evaluation.Evaluation;
 import tsp.evaluation.Path;
+import tsp.output.LogFileOutput;
 import tsp.output.OutputWriter;
 import tsp.output.StandardOutput;
 import tsp.projects.CompetitorProject;
@@ -15,33 +16,50 @@ import java.util.List;
 
 public class Genetic extends CompetitorProject {
 
+    private LogFileOutput output;
+
+
     private ArrayList<String> debug;
 
     private int populationSize;
+
+    //  private int[][] population;
+
+
     private ArrayList<Path> population;
 
     private double probabilityMutation = 0.8;
     private double probabilityCrossover = 1;
 
+    private double sartTime;
+
 
     private int length;
 
+    private int nGeneration = 0;
+
+    //   int[][] sortedCities;
 
     public Genetic(Evaluation evaluation) throws InvalidProjectException {
         super(evaluation);
         this.addAuthor("Maxence Schoirfer");
-        //this.addAuthor("Badis Belhadj-Chaidi");
         this.setMethodName("Genetic");
-        this.populationSize = this.problem.getLength() * 10;
-        // this.populationSize = 1000;
+        this.length = this.problem.getLength();
+        this.populationSize = length * 2;
+        this.output = new LogFileOutput("genetic.txt");
+
+        // this.population = new int[populationSize][length];
+
 
         debug = new ArrayList<>();
     }
 
     private int[] getGreedyPath() {
         int[] path = new int[length];
-        Coordinates lastCity = this.problem.getCoordinates(0);
-        for (int k = 1; k < length; k++) {
+        int startIndex = 34;
+        Coordinates lastCity = this.problem.getCoordinates(startIndex);
+        for (int k = 0; k < length; k++) {
+            if (k == startIndex) continue;
             int nextCity = -1;
             double distance = Double.MAX_VALUE;
 
@@ -64,31 +82,53 @@ public class Genetic extends CompetitorProject {
 
     @Override
     public void initialization() {
+        sartTime = System.currentTimeMillis();
+        Greedy greedy = new Greedy(problem);
+     //   output.print("Start Greedy init\n");
+        greedy.initialization();
+     //   output.print("Start Greedy get paths\n");
+        int[][] greedyPaths = greedy.getPaths();
         population = new ArrayList<>();
-        this.length = this.problem.getLength();
-        int[] greedyPath = getGreedyPath();
-        population.add(new Path(greedyPath));
-        for (int i = 1; i < populationSize; i++) {
-            if (i % 2 == 0) population.add(new Path(Mutation.mutationIM(greedyPath)));
-            else population.add(new Path(length));
-           // population.add(new Path(length));
+
+        for (int i = 0; i < length; i++) {
+            population.add(new Path(greedyPaths[i]));
+            population.add(new Path(Mutation.mutationIM(greedyPaths[i])));
+
+//            population.add(new Path(length));
+//            population.add(new Path(length));
+
+            // population[i] = greedyPaths[i];
+            // population[length+i] = Mutation.mutationIM(greedyPaths[i]);
         }
 
+        for (Path p:population) {
+            output.print(this.evaluation.evaluate(p) + "\n");
+        }
 
-     //   population.add();
+//        for (int i = 1; i < populationSize; i++) {
+//            if (i % 2 == 0) population.add(new Path(Mutation.mutationIM(greedyPath)));
+//            else population.add(new Path(length));
+//           // population.add(new Path(length));
+//        }
+
+
+        //   population.add();
     }
 
 
     //augmenter la mutation si l'optimum de change pas sur plusieurs génération
     @Override
     public void loop() {
-        debug.add("Génération : " + debug.size());
+     //   output.print("Génération : " + nGeneration + "\n");
+        nGeneration++;
         //parents
         ArrayList<Path> childs = new ArrayList<>();
 
         //TO-DO add probability crossover
         //selection for the crossover
-        ArrayList<Path> selectedParents = Selection.tournament(population, 80, 1, this.evaluation);
+     //   output.print("SELECT PARENTS");
+        ArrayList<Path> selectedParents = Selection.tournament(population, 10, 5, this.evaluation);
+     //   output.print("CROSSOVER");
         while (childs.size() < populationSize) {
             int rIndex1 = (int) (Math.random() * selectedParents.size());
             int rIndex2 = (int) (Math.random() * selectedParents.size());
@@ -98,6 +138,7 @@ public class Genetic extends CompetitorProject {
         }
 
         //mutation
+     //   output.print("MUTATION");
         Iterator<Path> iterator = childs.iterator();
         ArrayList<Path> mutatedChilds = new ArrayList<>();
         while (iterator.hasNext()) {
@@ -111,18 +152,19 @@ public class Genetic extends CompetitorProject {
             }
         }
 
-
+    //    output.print("SELECT CHILS");
         ArrayList<Path> selectedChilds = Selection.tournament(mutatedChilds, 10, 5, this.evaluation);
         population.clear();
         population.addAll(selectedParents);
         population.addAll(selectedChilds);
+      //  output.print("EVALUATION");
         for (Path path : population) {
             this.evaluation.evaluate(path);
         }
 
-        debug.add("Optimum = " + this.evaluation.getBestEvaluation());
+      //  output.print("Optimum = " + this.evaluation.getBestEvaluation() + "\n");
 
-        ecrireFichier("debug.txt", debug);
+       // ecrireFichier("debug.txt", debug);
 
         //mutation
 
