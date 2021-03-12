@@ -1,6 +1,7 @@
 package tsp.projects.geneticopt;
 
 import tsp.evaluation.Evaluation;
+import tsp.evaluation.Path;
 import tsp.output.LogFileOutput;
 import tsp.projects.CompetitorProject;
 import tsp.projects.InvalidProjectException;
@@ -18,7 +19,7 @@ public class Genetic extends CompetitorProject {
 
     //  private ArrayList<Path> population;
 
-    private double probabilityMutation = 0.8;
+    private double probabilityMutation = 0;
     private double probabilityCrossover = 1;
 
     private double startTime;
@@ -50,21 +51,27 @@ public class Genetic extends CompetitorProject {
         greedy.initialization();
         int[][] greedyPaths = greedy.getPaths();
 
+
         population = new int[populationSize][length];
 
         for (int i = 0; i < length; i++) {
             population[i] = greedyPaths[i];
-            population[length + i] = Mutation.mutationIM(greedyPaths[i]);
+            population[length + i] = Mutation.mutationTHRORS(greedyPaths[i].clone());
         }
+
+//        for (int[] p:greedyPaths) {
+//            this.evaluation.evaluate(new Path(p));
+//        }
     }
 
 
     //augmenter la mutation si l'optimum de change pas sur plusieurs génération
     @Override
     public void loop() {
-        output.print("Génération : " + nGeneration + "\n" );//+ "Optimum : " + this.evaluation.getBestEvaluation() + "\n");
+        output.print("Génération : " + nGeneration + "\n" + "Optimum : " + this.evaluation.getBestEvaluation() + "\n");
 
         nGeneration++;
+
 
         int indexChildren = 0;
         int[][] children = new int[populationSize][length];
@@ -73,7 +80,9 @@ public class Genetic extends CompetitorProject {
         while (indexChildren < populationSize - 1) {
             int parent1 = (int) (Math.random() * selectedParents.length);
             int parent2 = (int) (Math.random() * selectedParents.length);
-            int[][] c = Crossover.crossoverOX1(selectedParents[parent1], selectedParents[parent2]);
+         //   int[][] c = Crossover.crossoverOX1(selectedParents[parent1], selectedParents[parent2]);
+            int[][] c = Crossover.crossoverMPX(selectedParents[parent1], selectedParents[parent2]);
+         //   int[][] c = Crossover.crossoverNone(selectedParents[parent1], selectedParents[parent2]);
             children[indexChildren] = c[0];
             children[indexChildren + 1] = c[1];
             indexChildren += 2;

@@ -119,7 +119,7 @@ public class Genetic extends CompetitorProject {
     //augmenter la mutation si l'optimum de change pas sur plusieurs génération
     @Override
     public void loop() {
-        output.print("Génération : " + nGeneration + "\n");
+        output.print("Génération : " + nGeneration + "\n" + "Optimum : " + this.evaluation.getBestEvaluation() + "\n");
         nGeneration++;
         //parents
         ArrayList<Path> childs = new ArrayList<>();

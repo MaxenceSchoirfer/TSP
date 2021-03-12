@@ -3,8 +3,6 @@ package tsp.projects.geneticopt;
 import tsp.evaluation.Problem;
 import tsp.output.LogFileOutput;
 
-
-//to-do optimize
 public class Greedy {
 
     private LogFileOutput output;
@@ -91,7 +89,7 @@ public class Greedy {
             distance = Double.MAX_VALUE;
             indexNearestCity = -1;
             for (int i = 0; i < length; i++) {
-               // if (clone[i] != -1 && clone[i] != origin) {
+                // if (clone[i] != -1 && clone[i] != origin) {
                 if (clone[i] != -1) {
                     double d = distance(problem.data[clone[i]][0], problem.data[clone[i]][1], problem.data[origin][0], problem.data[origin][1]);
                     if (d < distance) {

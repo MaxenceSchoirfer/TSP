@@ -1,6 +1,7 @@
 package tsp.projects.geneticopt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Crossover {
@@ -94,5 +95,182 @@ public class Crossover {
         return result;
     }
 
+
+    public static int[][] crossoverNone(int[] p1, int[] p2){
+        int[][] children = new int[2][p1.length];
+        children[0] = p1;
+        children[1] = p2;
+        return children;
+    }
+
+    public static int[][] crossoverMPX(int[] p1, int[] p2) {
+        //mockup data  https://tel.archives-ouvertes.fr/tel-00126292/document p.51 (pdf p.70)
+        /*
+        int x1 = 1;
+        int x2 = 3;
+
+        int[] p1 = {1, 2, 3, 4, 5, 6, 7};
+        int[] p2 = {7, 5, 1, 3, 2, 6, 4};*/
+
+        int min = 1;
+        int x1 = (int) (Math.random() * ((p1.length - 2) - min) + 1) + min;
+        int x2 = (int) (Math.random() * ((p1.length - 2) - min) + 1) + min;
+
+        int[] child1 = new int[p1.length];
+        int[] child2 = new int[p1.length];
+        Arrays.fill(child1, -1);
+        Arrays.fill(child2, -1);
+
+
+        int x1p2 = 0;
+
+        for (int i = 0; i < p2.length; i++) {
+            if (p2[i] == p1[x1]) {
+                x1p2 = i;
+                break;
+            }
+        }
+
+        int[] p1onC1 = new int[x2 - x1 + 1];
+        int[] p2onC2 = new int[x2 - x1 + 1];
+        for (int i = x1p2; i < p2.length; i++) {
+            child1[i] = p1[x1 - x1p2 + i];
+            child2[i] = p2[x1 - x1p2 + i];
+            p1onC1[i - x1p2] = p1[x1 - x1p2 + i];
+            p2onC2[i - x1p2] = p2[x1 - x1p2 + i];
+        }
+
+
+        buildChildMPX(p2, child1, x1p2, p1onC1);
+        buildChildMPX(p1, child2, x1p2, p2onC2);
+
+
+        int[][] children = new int[2][p1.length];
+        children[0] = child1;
+        children[1] = child2;
+        return children;
+    }
+
+    private static void buildChildMPX(int[] parent, int[] child, int indexOnOtherParent, int[] alreadyOnChild) {
+        int j = 0;
+        for (int i = 0; i < indexOnOtherParent; i++) {
+            loop:
+            while (true) {
+                for (int value : alreadyOnChild) {
+                    if (parent[j] == value) {
+                        j++;
+                        continue loop;
+                    }
+                }
+                child[i] = parent[j];
+                j++;
+                break;
+            }
+        }
+    }
+
+
+    //doesn't work
+    public static int[][] crossoverERDX(int[] p, int[] p9) {
+        //mockup data  https://tel.archives-ouvertes.fr/tel-00126292/document p.51 (pdf p.70)
+        // -1 on all cities
+
+        int x1 = 1;
+        int x2 = 1;
+
+        int[] p1 = {0, 1, 2, 3, 4, 5, 6};
+        int[] p2 = {6, 4, 0, 2, 1, 5, 3};
+
+        int[][] neighbours = new int[5][p1.length];
+        for (int i = 0; i < p1.length; i++) {
+            neighbours[0][i] = i;
+        }
+
+
+        int n1 = -1, n2 = -1, n3 = -1, n4 = -1, nextIndex, previousIndex;
+
+        for (int i = 0; i < p1.length; i++) {
+
+//            int nextIndex = (i + 1) % p1.length;
+//            int previousIndex = i - 1;
+//            if (i == 0) previousIndex = p1.length - 1;
+//
+//            n1 = p1[nextIndex];
+//            n2 = p1[previousIndex];
+
+            //cherche voisin dans parent 1
+            for (int j = 0; j < p1.length; j++) {
+                if (p1[j] == i) {
+                    nextIndex = (j + 1) % p1.length;
+                    previousIndex = j - 1;
+                    if (j == 0) previousIndex = p1.length - 1;
+
+                    n1 = p1[nextIndex];
+                    n2 = p1[previousIndex];
+                    break;
+                }
+            }
+
+            //cherche voisin dans parent2
+            for (int j = 0; j < p2.length; j++) {
+                if (p2[j] == i) {
+                    nextIndex = (j + 1) % p2.length;
+                    previousIndex = j - 1;
+                    if (j == 0) previousIndex = p2.length - 1;
+
+                    n3 = p2[nextIndex];
+                    n4 = p2[previousIndex];
+                    break;
+                }
+            }
+
+            neighbours[1][i] = n1;
+            neighbours[2][i] = n2;
+            if (n3 != n1 && n3 != n2) neighbours[3][i] = n3;
+            else neighbours[3][i] = -1;
+
+            if (n4 != n1 && n4 != n2) neighbours[4][i] = n4;
+            else neighbours[4][i] = -1;
+
+
+        }
+
+        int[][] children = new int[2][p1.length];
+        int[][] copy = neighbours.clone();
+        int x = (int) (Math.random() * ((p1.length - 1) + 1));
+        children[0][0] = p1[x];
+        copy[0][p1[x]] = -1;
+
+        //on construit le reste de l'enfant 1
+        for (int i = 1; i < p1.length; i++) {
+            int numberNeighbours = 5;
+            int indexLessNeighbours = -1;
+
+            //dernier sommet insert
+            int[] neighboursCity = {copy[1][children[0][i - 1]], copy[2][children[0][i - 1]], copy[3][children[0][i - 1]], copy[4][children[0][i - 1]]};
+            for (int j = 0; j < neighboursCity.length; j++) {
+                int[] n = {neighbours[1][neighboursCity[j]], neighbours[2][neighboursCity[j]], neighbours[3][neighboursCity[j]], neighbours[4][neighboursCity[j]]};
+                int numberN = 0;
+                for (int value : n) {
+                    if (value != -1) numberN++;
+                }
+                if (numberN < numberNeighbours) {
+                    numberNeighbours = numberN;
+                    indexLessNeighbours = j;
+                }
+            }
+            children[0][i] = neighboursCity[indexLessNeighbours];
+            for (int j = 1; j < copy.length; j++) {
+                for (int k = 0; k < copy[0].length; k++) {
+                    if (copy[j][k] == neighboursCity[indexLessNeighbours]) copy[j][k] = -1;
+                }
+            }
+            //   copy[0][neighboursCity[indexLessNeighbours]] = -1;
+
+        }
+
+
+        return children;
+    }
 
 }
