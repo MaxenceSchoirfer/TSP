@@ -22,6 +22,7 @@ public class Recuit extends CompetitorProject {
     private final int  maxT = 10;
     private Path actualpath;
     private Path bestpath;
+    private final double coef = 0.9;
 
     private LogFileOutput output;
 
@@ -37,12 +38,12 @@ public class Recuit extends CompetitorProject {
 
     private boolean accept(){
 
-        if(delta < 0) {
-            bestpath = new Path(actualpath);
+        if(this.delta < 0) {
+            this.bestpath = new Path(this.actualpath);
             return true;
         }
         else {
-            double val = (-delta)/temperature;
+            double val = (-this.delta)/this.temperature;
             double proba = Math.exp(val);
             if (Math.random() < proba) {
                 return true;
@@ -54,8 +55,10 @@ public class Recuit extends CompetitorProject {
     }
 
     private void cooling (){
-        temperature --;
-        iteration = 0;
+        if(temperature >0) {
+            this.temperature--;
+            this.iteration = 0;
+        }
     }
 
     private int[] getGreedyPath() {
@@ -102,8 +105,8 @@ public class Recuit extends CompetitorProject {
     	this.iteration = 0;
         this.length = this.problem.getLength();
         int [] gpath= getGreedyPath();
-        actualpath = new Path(gpath);
-        bestpath = new Path(gpath);
+        this.actualpath = new Path(gpath);
+        this.bestpath = new Path(gpath);
         this.evaluation.evaluate(actualpath);
     }
 
@@ -112,19 +115,20 @@ public class Recuit extends CompetitorProject {
     @Override
     public void loop() {
 
-        Path mutatedPath = new Path(Mutation.mutationIM(actualpath.getPath()));
-        delta = evaluation.evaluate(mutatedPath) - evaluation.evaluate(actualpath);
+        Path mutatedPath = new Path(Mutation.mutationIM(this.actualpath.getPath()));
+        this.delta = this.evaluation.evaluate(mutatedPath) - this.evaluation.evaluate(actualpath);
         if(accept()) {
-            output.print("T : "+ temperature+"  Best path : " + Arrays.toString(bestpath.getPath()) + "\n");
-            actualpath = mutatedPath;
+            output.print("best: "+this.evaluation.getBestEvaluation()+", T : "+ temperature+"  Best path : " + Arrays.toString(this.bestpath.getPath()) + "\n");
+            this.actualpath = mutatedPath;
         }
+
         iteration+= 1;
         if(iteration == maxT){
             cooling();
+            if(temperature <= 0){
+                temperature= 0.2;
+            }
         }
+
    }
-        
-        
-
-
 }
