@@ -1,7 +1,5 @@
-package tsp.projects.geneticopt;
+package tsp.projects.geneticopt.tools;
 
-import tsp.evaluation.Evaluation;
-import tsp.evaluation.Path;
 import tsp.evaluation.Problem;
 import tsp.output.LogFileOutput;
 
@@ -21,22 +19,24 @@ public class Greedy {
 
     private final int[][] paths;
 
+    private double[][] data;
 
     public Greedy(Problem problem) {
         this.problem = problem;
+        this.data = problem.getData();
         this.length = this.problem.getLength();
         this.paths = new int[length][length];
     }
 
     public int[] getSinglePath(int startIndex) {
-   //     int startIndex = 0;
         int[] path = new int[length];
         Arrays.fill(path, -1);
         path[0] = startIndex;
 
         double[] lastCity = new double[2];
-        lastCity[0] = problem.getData()[startIndex][0];
-        lastCity[1] = problem.getData()[startIndex][1];
+        lastCity[0] = data[startIndex][0];
+        lastCity[1] = data[startIndex][1];
+
 
         //select city k
         for (int k = 1; k < length; k++) {
@@ -49,8 +49,8 @@ public class Greedy {
                     if (i == path[j]) continue loop;
                 }
 
-                double dx = this.problem.getData()[i][0] - lastCity[0];
-                double dy = this.problem.getData()[i][1] - lastCity[1];
+                double dx = this.data[i][0] - lastCity[0];
+                double dy = this.data[i][1] - lastCity[1];
                 double d = Math.sqrt(dx * dx + dy * dy);
                 if (d < distance) {
                     distance = d;
@@ -60,20 +60,20 @@ public class Greedy {
 
             if (nextCity != -1) {
                 path[k] = nextCity;
-                lastCity[0] = this.problem.getData()[nextCity][0];
-                lastCity[1] = this.problem.getData()[nextCity][1];
+                lastCity[0] = this.data[nextCity][0];
+                lastCity[1] = this.data[nextCity][1];
             }
 
         }
         return path;
     }
 
-    public void initialization(Evaluation e) {
+    public void initialization() {
         //this.startTime = System.currentTimeMillis();
         sortCities();
         for (int i = 0; i < length; i++) {
+            output.print("Create path " + i + "\n");
             paths[i] = creatPath(i);
-            output.print(i + " : "  + e.evaluate(new Path(paths[i])) + "\n");
         }
     }
 
@@ -111,7 +111,7 @@ public class Greedy {
 
         this.sortedCities = new int[length][length];
         for (int i = 0; i < length; i++) {
-            //output.print("Time(" + i + " : " + (System.currentTimeMillis() - startTime) + "\n");
+            output.print("Sort city " + i + "\n");
             sortedCities[i] = getNearestNeighbours(i, copyCities.clone());
         }
     }
@@ -131,7 +131,7 @@ public class Greedy {
             for (int i = 0; i < length; i++) {
                 // if (clone[i] != -1 && clone[i] != origin) {
                 if (clone[i] != -1) {
-                    double d = distance(problem.getData()[clone[i]][0], problem.getData()[clone[i]][1], problem.getData()[origin][0], problem.getData()[origin][1]);
+                    double d = distance(data[clone[i]][0], data[clone[i]][1], data[origin][0], data[origin][1]);
                     if (d < distance) {
                         distance = d;
                         indexNearestCity = i;

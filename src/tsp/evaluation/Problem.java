@@ -18,8 +18,12 @@ public final class Problem
     private String name;
 	private int length;
 	public double [][] data;
-    
-    /**
+
+	public double[][] getData() {
+		return data.clone();
+	}
+
+	/**
      * @return La liste des problèmes disponibles
      */
     public static ArrayList <Problem> getProblems ()

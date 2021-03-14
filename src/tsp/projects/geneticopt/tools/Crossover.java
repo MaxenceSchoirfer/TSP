@@ -1,4 +1,4 @@
-package tsp.projects.geneticopt;
+package tsp.projects.geneticopt.tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,7 +95,6 @@ public class Crossover {
         return result;
     }
 
-
     public static int[][] crossoverNone(int[] p1, int[] p2){
         int[][] children = new int[2][p1.length];
         children[0] = p1;
@@ -168,7 +167,6 @@ public class Crossover {
             }
         }
     }
-
 
     //doesn't work
     public static int[][] crossoverERDX(int[] p, int[] p9) {
@@ -268,8 +266,6 @@ public class Crossover {
             //   copy[0][neighboursCity[indexLessNeighbours]] = -1;
 
         }
-
-
         return children;
     }
 

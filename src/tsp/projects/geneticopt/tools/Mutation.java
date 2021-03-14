@@ -1,4 +1,4 @@
-package tsp.projects.geneticopt;
+package tsp.projects.geneticopt.tools;
 
 import java.util.Arrays;
 
