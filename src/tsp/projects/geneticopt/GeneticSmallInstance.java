@@ -23,7 +23,6 @@ public class GeneticSmallInstance extends Project {
 
     private final int length;
     private final int[][] population;
-    private int[] bestPath;
 
     public GeneticSmallInstance(Evaluation evaluation, double probaMutation, double probaCrossover) throws InvalidProjectException {
         super(evaluation);
