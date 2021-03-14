@@ -1,5 +1,7 @@
 package tsp.projects.geneticopt.tools;
 
+import tsp.evaluation.Evaluation;
+import tsp.evaluation.Path;
 import tsp.evaluation.Problem;
 import tsp.output.LogFileOutput;
 
@@ -149,6 +151,19 @@ public class Greedy {
         double dx = x2 - x1;
         double dy = y2 - y1;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+
+
+    public int[] getBestPath(Evaluation evaluation){
+        int[] bestPath = paths[0];
+        double bestEvalutation = Double.MAX_VALUE;
+        for (int i = 0; i < problem.getLength(); i++) {
+            if (evaluation.evaluate(new Path(paths[i])) < bestEvalutation){
+                bestPath = paths[i];
+                bestEvalutation = evaluation.getBestEvaluation();
+            }
+        }
+        return bestPath;
     }
 
     public int[][] getPaths() {

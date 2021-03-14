@@ -2,7 +2,6 @@ package tsp.projects.geneticopt.tools;
 
 import tsp.evaluation.Evaluation;
 import tsp.evaluation.Path;
-import tsp.projects.geneticopt.Adam;
 
 import java.util.ArrayList;
 import java.util.Arrays;

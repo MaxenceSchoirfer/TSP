@@ -129,8 +129,8 @@ public final class Main extends OutputWriter
         for (int i = 0; i < problems.size (); i++)
             solutions.add (new ArrayList <Solution> ());
         Reflections reflections = new Reflections ("tsp.projects");
-        Set<Class<? extends Project>> subClassesTmp = reflections.getSubTypesOf (Project.class);
-        //Set<Class<? extends CompetitorProject>> subClassesTmp = reflections.getSubTypesOf (CompetitorProject.class);
+    //    Set<Class<? extends Project>> subClassesTmp = reflections.getSubTypesOf (Project.class);
+        Set<Class<? extends CompetitorProject>> subClassesTmp = reflections.getSubTypesOf (CompetitorProject.class);
         ArrayList<Class<? extends Project>> subClasses = new ArrayList <Class <? extends Project>> ();;
         for (Class<? extends Project> subClass : subClassesTmp)
         {

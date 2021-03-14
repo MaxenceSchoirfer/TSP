@@ -1,57 +1,52 @@
-package tsp.projects.geneticopt;
+package tsp.projects.geneticopt.test.mutatation;
+
 
 import tsp.evaluation.Evaluation;
-import tsp.evaluation.Path;
 import tsp.output.LogFileOutput;
+import tsp.projects.CompetitorProject;
 import tsp.projects.InvalidProjectException;
-import tsp.projects.Project;
-import tsp.projects.geneticopt.tools.Crossover;
-import tsp.projects.geneticopt.tools.Greedy;
-import tsp.projects.geneticopt.tools.Mutation;
-import tsp.projects.geneticopt.tools.Selection;
+import tsp.projects.geneticopt.Crossover;
+import tsp.projects.geneticopt.Greedy;
+import tsp.projects.geneticopt.Mutation;
+import tsp.projects.geneticopt.Selection;
 
 
-public class GeneticSmallInstance extends Project {
+public class THRORS extends CompetitorProject {
 
-    private static double PROBABILITY_MUTATION = 0.4;
-    private static double PROBABILITY_CROSSOVER = 0;
+    private final static double PROBABILITY_MUTATION = 1;
+    private final static double PROBABILITY_CROSSOVER = 0;
 
-//    private final LogFileOutput output = new LogFileOutput("geneticOPT.txt");
-//    private int nGeneration = 0;
-//    private double startTime;
+    private final LogFileOutput output = new LogFileOutput("THRORS.txt");
+    private int nGeneration = 0;
+    private double startTime;
 
 
     private final int length;
     private final int[][] population;
-    private int[] bestPath;
 
-    public GeneticSmallInstance(Evaluation evaluation, double probaMutation, double probaCrossover) throws InvalidProjectException {
+    public THRORS(Evaluation evaluation) throws InvalidProjectException {
         super(evaluation);
-//        this.addAuthor("Maxence Schoirfer");
-//        this.setMethodName("GeneticOpt");
-
-        PROBABILITY_CROSSOVER = probaCrossover;
-        PROBABILITY_MUTATION = probaMutation;
+        this.addAuthor("Maxence Schoirfer");
+        this.setMethodName("THRORS");
 
         this.length = this.problem.getLength();
-        this.population = new int[length * 3][length];
+        this.population = new int[length * 2][length];
     }
 
 
     @Override
     public void initialization() {
-      //  this.startTime = System.currentTimeMillis();
+        output.print("\nINITIALIZATION ------------------------------------------");
+        this.startTime = System.currentTimeMillis();
         Greedy greedy = new Greedy(problem);
         greedy.initialization();
         int[][] greedyPaths = greedy.getPaths();
-     //   output.print("Temps de recheche greedy :" + (System.currentTimeMillis() -  this.startTime) +"\n");
 
 
         for (int i = 0; i < length; i++) {
             population[i] = greedyPaths[i];
-         //   output.print(i + " : " + evaluation.evaluate(new Path(greedyPaths[i])) +"\n");
-            population[length + i] = Mutation.mutationIM(greedyPaths[i].clone());
-            population[2 * length + i] = Path.getRandomPath(length);
+            population[length + i] = Mutation.mutationTHRORS(greedyPaths[i].clone());
+            //population[length + i] = Mutation.mutationIM(greedyPaths[i].clone());
         }
     }
 
@@ -60,8 +55,8 @@ public class GeneticSmallInstance extends Project {
     @Override
     public void loop() {
         // -------------------------------------- DEBUG -----------------------------------------------------------------------------
-   //    output.print("Génération : " + nGeneration + "\n" + "Optimum : " + this.evaluation.getBestEvaluation() + "\n");
-     //   nGeneration++;
+        output.print("Génération : " + nGeneration + "\n" + "Optimum : " + this.evaluation.getBestEvaluation() + "\n");
+        nGeneration++;
 
 
         int indexChildren = 0;
@@ -89,7 +84,7 @@ public class GeneticSmallInstance extends Project {
         int[][] mutatedChildren = new int[population.length][length];
         for (int i = 0; i < population.length; i++) {
             if (Math.random() < PROBABILITY_MUTATION)
-                mutatedChildren[i] = Mutation.mutationIM(children[i]);
+                mutatedChildren[i] = Mutation.mutationTHRORS(children[i]);
             else mutatedChildren[i] = children[i];
         }
 

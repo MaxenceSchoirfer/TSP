@@ -17,7 +17,7 @@ public final class Problem
     private static final String directory = "data";
     private String name;
 	private int length;
-	public double [][] data;
+	private double [][] data;
 
 	public double[][] getData() {
 		return data.clone();
