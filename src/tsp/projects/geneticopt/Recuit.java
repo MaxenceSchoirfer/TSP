@@ -1,16 +1,17 @@
-package tsp.projects.recuit;
+package tsp.projects.geneticopt;
 
-import tsp.evaluation.Coordinates;
 import tsp.evaluation.Evaluation;
 import tsp.evaluation.Path;
 import tsp.output.LogFileOutput;
-import tsp.projects.CompetitorProject;
 import tsp.projects.InvalidProjectException;
+import tsp.projects.Project;
+import tsp.projects.geneticopt.tools.Greedy;
+import tsp.projects.geneticopt.tools.Mutation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Recuit extends CompetitorProject {
+public class Recuit extends Project {
 
     private ArrayList<String> debug;
     private int [] path;
@@ -32,8 +33,8 @@ public class Recuit extends CompetitorProject {
         //this.addAuthor("Maxence Schoirfer");
         this.addAuthor("Badis Belhadj-Chaidi");
         this.setMethodName("Recuit simulé");
-        debug = new ArrayList<>();
-        output = new LogFileOutput("recuit.txt");
+        //debug = new ArrayList<>();
+        //output = new LogFileOutput("recuit.txt");
     }
 
     private boolean accept(){
@@ -45,12 +46,7 @@ public class Recuit extends CompetitorProject {
         else {
             double val = (-this.delta)/this.temperature;
             double proba = Math.exp(val);
-            if (Math.random() < proba) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return Math.random() < proba;
         }
     }
 
@@ -87,7 +83,7 @@ public class Recuit extends CompetitorProject {
         Path mutatedPath = new Path(Mutation.mutationIM(this.actualpath.getPath()));
         this.delta = this.evaluation.evaluate(mutatedPath) - this.evaluation.evaluate(actualpath);
         if(accept()) {
-            output.print("best: "+this.evaluation.getBestEvaluation()+", T : "+ temperature+"  Best path : " + Arrays.toString(this.bestpath.getPath()) + "\n");
+//            output.print("best: "+this.evaluation.getBestEvaluation()+", T : "+ temperature+"  Best path : " + Arrays.toString(this.bestpath.getPath()) + "\n");
             this.actualpath = mutatedPath;
         }
 

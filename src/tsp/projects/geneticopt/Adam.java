@@ -20,6 +20,7 @@ public class Adam extends CompetitorProject {
         else if (evaluation.getProblem().getLength() < 2000)
             this.currentProject = new GeneticLargeInstance(evaluation, 0.4, 0);
         //else this.currentProject = new SimulatedAnnealing(evaluation);
+//        this.currentProject = new Recuit(this.evaluation);
     }
 
     @Override
