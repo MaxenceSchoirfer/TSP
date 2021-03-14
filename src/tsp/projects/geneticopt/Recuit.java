@@ -66,10 +66,14 @@ public class Recuit extends Project {
     	this.iteration = 0;
         this.length = this.problem.getLength();
         Greedy gr = new Greedy(this.problem);
-        gr.initialization();
-
-        int[] gpath = gr.getBestPath(this.evaluation);
-        //int [] gpath= gr.getSinglePath(startIndex);
+        int []gpath;
+        if(this.length <2000) {
+            gr.initialization();
+            gpath = gr.getBestPath(this.evaluation);
+        }
+        else {
+            gpath = gr.getSinglePath(startIndex);
+        }
         this.actualpath = new Path(gpath);
         this.bestpath = new Path(gpath);
         this.evaluation.evaluate(actualpath);
